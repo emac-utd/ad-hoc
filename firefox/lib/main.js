@@ -20,13 +20,11 @@ var selectorsRequest = Request({
             contentScriptWhen: "ready",
             contentScriptFile: [
                 data.url("common/jquery.min.js"),
-                data.url("common/fancybox/jquery.fancybox.pack.js"),
                 data.url("common/adreplacer.js"),
                 data.url("content.js")
             ],
             contentStyleFile: [
-                data.url("common/content.css"),
-                data.url("common/fancybox/jquery.fancybox.css")
+                data.url("common/content.css")
             ],
             onAttach: function(worker) {
                 worker.postMessage({'action': 'setSelectors', 'data': selectors});
