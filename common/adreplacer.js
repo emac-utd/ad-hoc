@@ -6,19 +6,8 @@ var AdReplacer = (function() {
         this.$replTemplate = $('<div class="ad-ade-repl"></div>'),
         $circle = $('<svg version="1.1" width="100%" height="100%" viewBox="0 0 100 100"><circle fill="#df0641" cx="50" cy="50" r="50"/></svg>'),
         $circle.appendTo(this.$replTemplate);
-        this.$replTemplate.on('click', openLightbox);
     }
     
-    function openLightbox(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $.fancybox_aa('http://ad-ade.de/index.php/posts/', {
-            type:'iframe',
-            margin: [140,20,20,20],
-            wrapCSS: 'ad-ade'
-        });
-        return false;
-    };
     
     AdReplacer.prototype.replace = function() {
         var self = this;
@@ -28,7 +17,6 @@ var AdReplacer = (function() {
                 $elements.each(function(i, element) {
                     var $element = $(element);
                     var $repl = self.$replTemplate.clone(true);
-                    $repl.on('click', openLightbox);
                     $repl.attr('title', selector);
                     $repl.css({
                         position: $element.css('position'),
