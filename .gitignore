@@ -17,3 +17,5 @@ safari/ad-ade.safariextension/Info.plist
 *.zip
 
 build
+
+server/node_modules
