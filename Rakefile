@@ -6,7 +6,7 @@ METADATA = OpenStruct.new(
   :shortname => 'ad-ade',
   :version => '1.5',
   :author => 'Eike Theresa Stender, Philipp Bosch',
-  :description => 'Lass die Werbung aus deinem Browser verschwinden und bekomme stattdessen täglich verschiedene Artikel, Bilder oder Videos.',
+  :description => 'UTD ad-ade fork',
   :website => 'http://www.ad-ade.de/'
 )
 
@@ -34,7 +34,7 @@ end
 
 # BUILD FIREFOX ADDON #
 task :build_firefox do
-  copy_common_files 'firefox/data/common'
+  copy_common_files 'firefox/data'
   render_template 'firefox/package.json.erb', 'firefox/package.json', METADATA
   sh "cd firefox && cfx xpi"
 end
