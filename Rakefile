@@ -13,7 +13,7 @@ METADATA = OpenStruct.new(
 task :build => [:build_chrome, :build_firefox, :build_safari]
 
 def copy_common_files(target_dir)
-  sh "rm -rf #{target_dir} && mkdir -p #{target_dir} && cp -R common/ #{target_dir}"
+  sh "rm -rf #{target_dir}/common && mkdir -p #{target_dir} && cp -R common/ #{target_dir}"
 end
 
 def render_template(source, target, data)
