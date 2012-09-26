@@ -3,7 +3,7 @@ website/wp-config.php
 chrome/ad-ade/common
 chrome/ad-ade/manifest.json
 
-firefox/data
+firefox/data/common
 firefox/package.json
 
 safari/ad-ade.safariextension/common
