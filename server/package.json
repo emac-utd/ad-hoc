@@ -1,0 +1,10 @@
+{
+    "name": "content-swap-server",
+    "decription": "Content provider for the UTD ad-ade fork (title tbd)",
+    "version": "0.0.1",
+    "main": "./server.js",
+    "dependencies":{
+        "express": "*"
+    },
+    "private": true
+}
