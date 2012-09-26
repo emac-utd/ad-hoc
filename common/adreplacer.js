@@ -3,9 +3,7 @@ var AdReplacer = (function() {
     
     function AdReplacer(theSelectors) {
         selectors = theSelectors;
-        this.$replTemplate = $('<div class="ad-ade-repl"></div>'),
-        $circle = $('<svg version="1.1" width="100%" height="100%" viewBox="0 0 100 100"><circle fill="#df0641" cx="50" cy="50" r="50"/></svg>'),
-        $circle.appendTo(this.$replTemplate);
+        this.$replTemplate = $('<div class="ad-ade-repl"></div>');
     }
     
     
@@ -26,6 +24,9 @@ var AdReplacer = (function() {
                         height: $element.height() + 'px',
                         float: $element.css('float'),
                         zIndex: $element.css('z-index')
+                    });
+                    $.get('http://localhost:3000/' + $element.width() + '/' + $element.height(), function(data){
+                        $repl.html(data);
                     });
                     $element.replaceWith($repl);
                     setTimeout(function($repl) {
