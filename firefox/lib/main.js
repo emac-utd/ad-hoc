@@ -31,7 +31,7 @@ var selectorsRequest = Request({
                 worker.port.on("adRequest", function(data)
                 {
                     var adRequest = Request({
-                        url: "http://localhost:3000/" + data.width + "/" + data.height,
+                        url: "http://localhost:3000/?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                         onComplete: function(response)
                         {
                             worker.port.emit("adResult" + data.nonce, response.text);
