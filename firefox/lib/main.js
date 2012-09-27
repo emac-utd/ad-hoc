@@ -28,6 +28,16 @@ var selectorsRequest = Request({
             ],
             onAttach: function(worker) {
                 worker.postMessage({'action': 'setSelectors', 'data': selectors});
+                worker.port.on("adRequest", function(data)
+                {
+                    var adRequest = Request({
+                        url: "http://localhost:3000/" + data.width + "/" + data.height,
+                        onComplete: function(response)
+                        {
+                            worker.port.emit("adResult" + data.nonce, response);
+                        }
+                    });
+                });
             }
         });
         
