@@ -1,5 +1,6 @@
 var AdReplacer = (function() {
     var selectors = [];
+    var nonces = [];    
     
     function AdReplacer(theSelectors) {
         selectors = theSelectors;
@@ -8,30 +9,46 @@ var AdReplacer = (function() {
     
     
     AdReplacer.prototype.replace = function() {
-        var self = this;
+        var rep = this;
         selectors.forEach(function(selector) {
             var $elements = $(selector);
             if ($elements.length) {
                 $elements.each(function(i, element) {
                     var $element = $(element);
-                    var $repl = self.$replTemplate.clone(true);
+                    var $repl = rep.$replTemplate.clone(true);
+                    var width = $element.width();
+                    var height = $element.height();
                     $repl.attr('title', selector);
                     $repl.css({
                         position: $element.css('position'),
                         left: $element.css('left'),
                         top: $element.css('top'),
-                        width: $element.width() + 'px',
-                        height: $element.height() + 'px',
+                        width: width + 'px',
+                        height: height + 'px',
                         float: $element.css('float'),
                         zIndex: $element.css('z-index')
                     });
-                    $.get('http://localhost:3000/' + $element.width() + '/' + $element.height(), function(data){
+
+                    var nonce = Math.floor(Math.random() * 100000);
+                    /*console.log("First nonce");
+                    while(nonces.indexOf(nonce != -1))
+                    {
+                        nonce = Math.floor(Math.random() * 100000);
+                        console.log("Nonce cycle");
+                    }
+                    nonces.push(nonce); */
+
+                    self.port.on("adResult" + nonce, function(data){
                         $repl.html(data);
+                        $element.replaceWith($repl);
+
+                        setTimeout(function($repl) {
+                            return function() { $repl.css('opacity', 1); }
+                        }($repl), 1);
                     });
-                    $element.replaceWith($repl);
-                    setTimeout(function($repl) {
-                        return function() { $repl.css('opacity', 1); }
-                    }($repl), 1);
+
+                    self.port.emit("adRequest",{"nonce": nonce, "width": width, "height": height});
+                    
                 });
             }
         });
