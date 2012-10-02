@@ -3,6 +3,18 @@ const data = require("self").data;
 const tabs = require("tabs");
 const Request = require('request').Request;
 
+var whitelist = [/.*youtube.com\/watch.*/];
+
+function shouldFilter(url)
+{
+    for(int i = 0; i < whitelist.length; i++)
+    {
+        if(whitelist[i].test(url))
+            return false;
+    }
+    return true;
+}
+
 var selectors = [];
 
 var selectorsRequest = Request({
@@ -14,7 +26,7 @@ var selectorsRequest = Request({
                 selectors.push(line);
             }
         });
-        
+
         pageMod.PageMod({
             include: "*",
             contentScriptWhen: "ready",
@@ -27,17 +39,20 @@ var selectorsRequest = Request({
                 data.url("common/content.css")
             ],
             onAttach: function(worker) {
-                worker.postMessage({'action': 'setSelectors', 'data': selectors});
-                worker.port.on("adRequest", function(data)
+                if(shouldFilter(worker.tab.url))
                 {
-                    var adRequest = Request({
-                        url: "http://localhost:3000/?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
-                        onComplete: function(response)
-                        {
-                            worker.port.emit("adResult" + data.nonce, response.text);
-                        }
-                    }).get();
-                });
+                    worker.postMessage({'action': 'setSelectors', 'data': selectors});
+                    worker.port.on("adRequest", function(data)
+                    {
+                        var adRequest = Request({
+                            url: "http://localhost:3000/?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
+                            onComplete: function(response)
+                            {
+                                worker.port.emit("adResult" + data.nonce, response.text);
+                            }
+                        }).get();
+                    });
+                }
             }
         });
         
