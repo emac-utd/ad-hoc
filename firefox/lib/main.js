@@ -7,7 +7,7 @@ var whitelist = [/.*youtube.com\/watch.*/];
 
 function shouldFilter(url)
 {
-    for(int i = 0; i < whitelist.length; i++)
+    for(var i = 0; i < whitelist.length; i++)
     {
         if(whitelist[i].test(url))
             return false;
