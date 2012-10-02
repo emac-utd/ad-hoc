@@ -29,6 +29,8 @@ var AdReplacer = (function() {
                         zIndex: $element.css('z-index')
                     });
 
+                    $element.parents('a').click(function(){return false;});
+
                     var nonce = Math.floor(Math.random() * 100000);
                     /*console.log("First nonce");
                     while(nonces.indexOf(nonce != -1))
