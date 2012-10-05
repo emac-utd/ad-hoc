@@ -4,7 +4,9 @@
     "version": "0.0.1",
     "main": "./server.js",
     "dependencies":{
-        "express": "*"
+        "express": "*",
+        "request": "*",
+        "underscore": "*"
     },
     "private": true
 }
