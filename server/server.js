@@ -10,7 +10,14 @@ var template = '<img src="http://placekitten.com/{width}/{height}" />'
 
 var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />'
 
-// var redditTemplate = '<iframe width="{width}" height="{height}" src="about:blank"><head /><body><a href"{url}">{title}</a><br><br> <a href="http://reddit.com{permalink}">comments</a></body></iframe>'
+// var redditCSS = '<style type="text/css">' + 
+//     'body *{display:visible;}'
+//     'h1 a{margin: 0 auto; font-size: 200%;}' +
+//     'a {margin: 0 auto;}' +
+//     'iframe{display:block;}' + 
+//     '   </style>';
+
+// var redditTemplate = '<iframe width="{width}" height="{height}">    <h1><a href"{url}">{title}</a></h1><a href="http://reddit.com{permalink}">comments</a></body></iframe>'
 
 
 //Init
@@ -54,10 +61,12 @@ function getTop() {
 
         if (!error && res.statusCode == 200) {
 
-            num = _.random(0 ,obj['data']['children'].length -1 )
-            redditRequest.title = obj['data']['children'][num]['data']['title'];
-            redditRequest.permalink = obj['data']['children'][num]['data']['permalink'];
-            redditRequest.url = obj['data']['children'][num]['data']['url'];
+            num = _.random(0 , obj.data.children.length -1 );
+            redditRequest.title = obj.data.children[num].data.title;
+            console.log(redditRequest.title);
+
+            redditRequest.permalink = obj.data.children[num].data.permalink;
+            redditRequest.url = obj.data.children[num].data.url;
 
         }
 
@@ -79,7 +88,7 @@ app.get('/reddit', function(req, res) {
     res.send("<a href=\"" + redditRequest.url + "\">" + redditRequest.title + 
          "</a> <br><br> <a href=\"http://reddit.com" + redditRequest.permalink + "\">" + "comments</a>");
 
-    // res.send(redditTemplate.replace("{width}", req.query.width).replace("{height}", req.query.height).replace("{url}", topPost.url).replace("{title}", topPost.title).replace("{permalink}", topPost.permalink));
+    // res.send(redditTemplate.replace("{width}", 400).replace("{height}", 200).replace("{url}", redditRequest.url).replace("{title}", redditRequest.title).replace("{permalink}", redditRequest.permalink));
 
 });
 
