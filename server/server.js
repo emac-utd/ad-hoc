@@ -1,11 +1,23 @@
 //Requires
-var express = require('express');
+var express = require('express'),
+    request = require('request'),
+    _ = require('underscore');
 
 //Constants
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
 var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
 var socketDemoTemplate = '<iframe src="/socketdemocontent?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
+
+// var redditCSS = '<style type="text/css">' + 
+//     'body *{display:visible;}'
+//     'h1 a{margin: 0 auto; font-size: 200%;}' +
+//     'a {margin: 0 auto;}' +
+//     'iframe{display:block;}' + 
+//     '   </style>';
+
+// var redditTemplate = '<iframe width="{width}" height="{height}">    <h1><a href"{url}">{title}</a></h1><a href="http://reddit.com{permalink}">comments</a></body></iframe>'
+
 
 //Init
 var app = express();
@@ -68,4 +80,53 @@ io.of('/_socketdemo').on('connection', function(socket){
     });
 });
 
-server.listen(3000);
+//Reddit serverin'
+
+var options = {
+  url: 'http://www.reddit.com/hot.json',
+  json: true
+};
+
+var num;
+var redditRequest = {title: 'error', url: 'error', permalink: 'error'};
+
+function getTop() {
+    
+    request(options, function(error, res, obj) {
+
+        console.log("calling reddit...");
+
+        if (!error && res.statusCode == 200) {
+
+            num = _.random(0 , obj.data.children.length -1 );
+            redditRequest.title = obj.data.children[num].data.title;
+            console.log(redditRequest.title);
+
+            redditRequest.permalink = obj.data.children[num].data.permalink;
+            redditRequest.url = obj.data.children[num].data.url;
+
+        }
+
+        else if (error) {
+
+            console.log("Problems connecting to Reddit.");
+        
+        }
+
+    });
+
+}
+
+
+app.get('/reddit', function(req, res) {
+
+    getTop();
+
+    res.send("<a href=\"" + redditRequest.url + "\">" + redditRequest.title + 
+         "</a> <br><br> <a href=\"http://reddit.com" + redditRequest.permalink + "\">" + "comments</a>");
+
+    // res.send(redditTemplate.replace("{width}", 400).replace("{height}", 200).replace("{url}", redditRequest.url).replace("{title}", redditRequest.title).replace("{permalink}", redditRequest.permalink));
+
+});
+
+app.listen(3000);

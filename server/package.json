@@ -6,7 +6,9 @@
     "dependencies":{
         "express": "*",
         "socket.io": "*",
-        "jade": "*"
+        "jade": "*",
+        "request": "*",
+        "underscore": "*"
     },
     "private": true
 }
