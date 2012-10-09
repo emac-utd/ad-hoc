@@ -45,7 +45,7 @@ var selectorsRequest = Request({
                     worker.port.on("adRequest", function(data)
                     {
                         var adRequest = Request({
-                            url: "http://localhost:3000/yodawg?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
+                            url: "http://localhost:3000/socketdemo?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
                                 worker.port.emit("adResult" + data.nonce, response.text);
