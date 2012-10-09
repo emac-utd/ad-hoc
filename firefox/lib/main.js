@@ -2,6 +2,7 @@ const pageMod = require("page-mod");
 const data = require("self").data;
 const tabs = require("tabs");
 const Request = require('request').Request;
+const prefSet = require('simple-prefs');
 
 var whitelist = [/.*youtube.com\/watch.*/];
 
@@ -45,7 +46,7 @@ var selectorsRequest = Request({
                     worker.port.on("adRequest", function(data)
                     {
                         var adRequest = Request({
-                            url: "http://localhost:3000/?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
+                            url: prefSet.prefs.endpoint + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
                                 worker.port.emit("adResult" + data.nonce, response.text);
