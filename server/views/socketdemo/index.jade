@@ -11,7 +11,7 @@ html(lang="en")
                 var width = $('#width').val();
                 var height = $('#height').val();
                 var location = $('#location').val();
-                socket.emit('init',{})
+                socket.emit('init',{width: width, height: height, location: location});
             });
 
             socket.on('newmsg',function(data){

@@ -7,7 +7,7 @@ var express = require('express'),
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
 var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
-var socketDemoTemplate = '<iframe src="/socketdemocontent?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
+var socketDemoTemplate = '<iframe src="http://localhost:3000/socketdemocontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
 
 // var redditCSS = '<style type="text/css">' + 
 //     'body *{display:visible;}'
@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/public'));
 //Express routing
 //Socket Demo
 app.get('/socketdemo', function(req, res){
-    console.log("socket request");
+    console.log(req.query.width + "x" + req.query.height);
     res.send(socketDemoTemplate.replace(/\{width\}/g, req.query.width).replace(/\{height\}/g, req.query.height).replace(/\{location\}/g, req.query.location));
 });
 
@@ -57,7 +57,7 @@ app.get('/yodawg', function(req, res){
 });
 
 //Default to cats, just like the rest of the internet
-app.get('/', function(req, res){
+app.get('/kitten', function(req, res){
     res.send(kittenTemplate.replace("{width}", req.query.width).replace("{height}", req.query.height));
 });
 
@@ -72,7 +72,7 @@ io.of('/_socketdemo').on('connection', function(socket){
         socket.roomkey = data.location.toString() + data.width.toString() + data.height.toString();
         socket.join(socket.roomkey);
         if(socketDemoMessage[socket.roomkey])
-            socket.emit('newmsg', {text: socketDemoMessage[key]});
+            socket.emit('newmsg', {text: socketDemoMessage[socket.roomkey]});
     });
     socket.on(('msg'), function(data){
         socketDemoMessage[socket.roomkey] = data.text;
@@ -122,11 +122,11 @@ app.get('/reddit', function(req, res) {
 
     getTop();
 
-    res.send("<a href=\"" + redditRequest.url + "\">" + redditRequest.title + 
+    res.send("<a href=\"" + redditRequest.url + "\">" + redditRequest.title +
          "</a> <br><br> <a href=\"http://reddit.com" + redditRequest.permalink + "\">" + "comments</a>");
 
     // res.send(redditTemplate.replace("{width}", 400).replace("{height}", 200).replace("{url}", redditRequest.url).replace("{title}", redditRequest.title).replace("{permalink}", redditRequest.permalink));
 
 });
 
-app.listen(3000);
+server.listen(3000);
