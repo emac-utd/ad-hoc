@@ -45,7 +45,7 @@ var AdReplacer = (function() {
                         $element.replaceWith($repl);
 
                         setTimeout(function($repl) {
-                            return function() { $repl.css('opacity', 1); }
+                            return function() { $repl.css('opacity', 1); };
                         }($repl), 1);
                     });
 
