@@ -9,14 +9,7 @@ var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
 var socketDemoTemplate = '<iframe src="http://localhost:3000/socketdemocontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
 
-// var redditCSS = '<style type="text/css">' + 
-//     'body *{display:visible;}'
-//     'h1 a{margin: 0 auto; font-size: 200%;}' +
-//     'a {margin: 0 auto;}' +
-//     'iframe{display:block;}' + 
-//     '   </style>';
-
-// var redditTemplate = '<iframe width="{width}" height="{height}">    <h1><a href"{url}">{title}</a></h1><a href="http://reddit.com{permalink}">comments</a></body></iframe>'
+var redditTemplate = '<iframe width="{width}" height="{height}" src="/redditframe" />';   
 
 
 //Init
@@ -119,11 +112,16 @@ function getTop() {
 
 
 app.get('/reddit', function(req, res) {
+    res.send(redditTemplate.replace("{width}", req.query.width).replace("{height}", req.query.height));
+});
+
+app.get('/redditframe', function(req, res) {
 
     getTop();
 
-    res.send("<a href=\"" + redditRequest.url + "\">" + redditRequest.title +
-         "</a> <br><br> <a href=\"http://reddit.com" + redditRequest.permalink + "\">" + "comments</a>");
+    var iframe = {title: redditRequest.title, link: redditRequest.url, comments: 'comments', permalink: ("http://reddit.com" + redditRequest.permalink)};
+    console.log(iframe);
+    res.render('reddit.jade', iframe);
 
     // res.send(redditTemplate.replace("{width}", 400).replace("{height}", 200).replace("{url}", redditRequest.url).replace("{title}", redditRequest.title).replace("{permalink}", redditRequest.permalink));
 
