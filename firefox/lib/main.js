@@ -3,6 +3,8 @@ const data = require("self").data;
 const tabs = require("tabs");
 const Request = require('request').Request;
 const prefSet = require('simple-prefs');
+const widget = require('widget');
+const panel = require('panel');
 
 var whitelist = [/.*youtube.com\/watch.*/, /.*\?arnoreplace=yes.*/];
 
@@ -28,6 +30,22 @@ var selectorsRequest = Request({
             }
         });
 
+        //UI panel
+        var adPanel = panel.Panel({
+            width: 300,
+            height: 185,
+            contentURL: data.url("settingspanel.html")
+        });
+
+        //UI widget
+        var adWidget = widget.Widget({
+            id: "ad-swap-widget",
+            label: "Ad Swap",
+            contentURL: data.url("common/icon-16.png"),
+            panel: adPanel
+        });
+
+        //Ad filter
         pageMod.PageMod({
             include: "*",
             contentScriptWhen: "ready",
@@ -46,14 +64,8 @@ var selectorsRequest = Request({
                     worker.port.on("adRequest", function(data)
                     {
                         console.log(data.width + "x" + data.height);
-                        var loc = "http://localhost:3000/socketdemo/?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url;
-                        console.log(loc);
                         var adRequest = Request({
-<<<<<<< HEAD
                             url: prefSet.prefs.endpoint + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
-=======
-                            url: loc,
->>>>>>> server
                             onComplete: function(response)
                             {
                                 worker.port.emit("adResult" + data.nonce, response.text);
