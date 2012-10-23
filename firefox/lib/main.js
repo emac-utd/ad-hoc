@@ -3,6 +3,8 @@ const data = require("self").data;
 const tabs = require("tabs");
 const Request = require('request').Request;
 const prefSet = require('simple-prefs');
+const widget = require('widget');
+const panel = require('panel');
 
 var whitelist = [/.*youtube.com\/watch.*/, /.*\?arnoreplace=yes.*/];
 
@@ -28,6 +30,35 @@ var selectorsRequest = Request({
             }
         });
 
+        //UI panel
+        var adPanel = panel.Panel({
+            width: 300,
+            height: 75,
+            contentURL: data.url("settingspanel.html"),
+            contentScriptFile: data.url("settings.js")
+        });
+
+        //UI widget
+        var adWidget = widget.Widget({
+            id: "ad-swap-widget",
+            label: "Ad Swap",
+            contentURL: data.url("common/icon-16.png"),
+            panel: adPanel
+        });
+
+        adPanel.on("show", function() {
+            adPanel.port.emit("show", {source: prefSet.prefs.endpoint, enabled: prefSet.prefs.enabled});
+        });
+
+        adPanel.port.on("sourcechange", function(data){
+            prefSet.prefs.endpoint = data.source;
+        });
+
+        adPanel.port.on("enabledchange", function(data){
+            prefSet.prefs.enabled = data.source;
+        });
+
+        //Ad filter
         pageMod.PageMod({
             include: "*",
             contentScriptWhen: "ready",
