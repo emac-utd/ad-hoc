@@ -33,8 +33,9 @@ var selectorsRequest = Request({
         //UI panel
         var adPanel = panel.Panel({
             width: 300,
-            height: 185,
-            contentURL: data.url("settingspanel.html")
+            height: 75,
+            contentURL: data.url("settingspanel.html"),
+            contentScriptFile: data.url("settings.js")
         });
 
         //UI widget
@@ -43,6 +44,18 @@ var selectorsRequest = Request({
             label: "Ad Swap",
             contentURL: data.url("common/icon-16.png"),
             panel: adPanel
+        });
+
+        adPanel.on("show", function() {
+            adPanel.port.emit("show", {source: prefSet.prefs.endpoint, enabled: prefSet.prefs.enabled});
+        });
+
+        adPanel.port.on("sourcechange", function(data){
+            prefSet.prefs.endpoint = data.source;
+        });
+
+        adPanel.port.on("enabledchange", function(data){
+            prefSet.prefs.enabled = data.source;
         });
 
         //Ad filter
