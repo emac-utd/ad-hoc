@@ -1,7 +1,8 @@
 //Requires
 var express = require('express'),
     request = require('request'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    spawn = require('child_process').spawn;
 
 //Constants
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
@@ -9,7 +10,7 @@ var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
 var socketDemoTemplate = '<iframe src="http://localhost:3000/socketdemocontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
 
-var redditTemplate = '<iframe width="{width}" height="{height}" src="/redditframe" />';   
+var redditTemplate = '<iframe width="{width}" height="{height}" src="/redditframe" />';
 
 
 //Init
@@ -125,6 +126,14 @@ app.get('/redditframe', function(req, res) {
 
     // res.send(redditTemplate.replace("{width}", 400).replace("{height}", 200).replace("{url}", redditRequest.url).replace("{title}", redditRequest.title).replace("{permalink}", redditRequest.permalink));
 
+});
+
+//Warning: this will only work if fortune is installed on the host
+app.get('/fortune', function(req, res){
+    var fortune = spawn('fortune');
+    fortune.stdout.on('data', function(data){
+        res.send(data.toString());
+    });
 });
 
 server.listen(3000);
