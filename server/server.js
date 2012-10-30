@@ -2,7 +2,8 @@
 var express = require('express'),
     request = require('request'),
     _ = require('underscore'),
-    spawn = require('child_process').spawn;
+    spawn = require('child_process').spawn,
+    util = require('util');
 
 //Constants
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
@@ -21,6 +22,8 @@ var io = require('socket.io').listen(server);
 //Set up express
 app.use(express.bodyParser());
 app.use(express.static(__dirname + '/public'));
+app.use(express.cookieParser());
+app.use(express.cookieSession({key: "ad-ade.gooutside", secret: "ADFONHE2210943fdsaDFFDnsav113e3"}));
 
 //Express routing
 //Socket Demo
@@ -134,6 +137,12 @@ app.get('/fortune', function(req, res){
     fortune.stdout.on('data', function(data){
         res.send(data.toString());
     });
+});
+
+app.get('/gooutside', function(req, res){
+    if(!req.session.timestamp)
+        req.session.timestamp = new Date();
+    res.send(util.inspect(req.session));
 });
 
 server.listen(3000);
