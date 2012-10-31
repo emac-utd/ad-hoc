@@ -25,7 +25,7 @@ end
 
 # BUILD CHROME EXTENSION #
 task :build_chrome do
-  copy_common_files 'chrome/ad-ade/common'
+  copy_common_files 'chrome/ad-ade'
   render_template 'chrome/ad-ade/manifest.json.erb', 'chrome/ad-ade/manifest.json', METADATA
   wd = File.expand_path(File.dirname(__FILE__))
   # sh "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --pack-extension=#{wd}/chrome/ad-ade --pack-extension-key=#{wd}/chrome/ad-ade.pem --no-message-box"
@@ -41,7 +41,7 @@ end
 
 # BUILD SAFARI EXTENSION #
 task :build_safari do
-  copy_common_files 'safari/ad-ade.safariextension/common'
+  copy_common_files 'safari/ad-ade.safariextension'
   sh 'cp common/icon-64.png safari/ad-ade.safariextension/Icon.png'
   render_template 'safari/ad-ade.safariextension/Info.plist.erb', 'safari/ad-ade.safariextension/Info.plist', METADATA
   puts "WARNING: Safari extension needs to be built from within Safari's Extension Builder."
