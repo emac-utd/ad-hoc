@@ -3,7 +3,8 @@ var express = require('express'),
     request = require('request'),
     _ = require('underscore'),
     spawn = require('child_process').spawn,
-    util = require('util');
+    util = require('util'),
+    countdown = require('countdown');
 
 //Constants
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
@@ -140,9 +141,31 @@ app.get('/fortune', function(req, res){
 });
 
 app.get('/gooutside', function(req, res){
-    if(!req.session.timestamp)
-        req.session.timestamp = new Date();
-    res.send(util.inspect(req.session));
+    var lastVisit;
+    var timestamp;
+    if(!req.session.timestamp){
+        req.session.timestamp = lastVisit = new Date();
+        req.session.lastVisit = timestamp = new Date();
+        res.send("You just got online!");
+    }
+    else
+    {
+        //Dates get encoded in the cookie as strings, must parse
+        lastVisit = new Date(req.session.lastVisit);
+        timestamp = new Date(req.session.timestamp);
+        if(lastVisit.getTime() - timestamp.getTime() > 900000)
+        {
+            req.session.timestamp = lastVisit = new Date();
+            req.session.lastVisit = timestamp = new Date();
+            res.send("You just got online!");
+        }
+        else
+        {
+            res.send("You have been online for " + countdown(timestamp).toString() + ".");
+        }
+
+
+    }
 });
 
 server.listen(3000);
