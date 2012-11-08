@@ -21,7 +21,7 @@ function shouldFilter(url)
 var selectors = [];
 
 var selectorsRequest = Request({
-    url: "http://ad-ade.de/selectors.txt?" + encodeURIComponent((new Date()).toString()),
+    url: data.url("common/selectors.txt"),
     onComplete: function(response) {
         var lines = response.text.split("\n");
         lines.forEach(function(line) {
@@ -76,10 +76,12 @@ var selectorsRequest = Request({
                     worker.postMessage({'action': 'setSelectors', 'data': selectors});
                     worker.port.on("adRequest", function(data)
                     {
+                        console.log("Request received");
                         var adRequest = Request({
                             url: prefSet.prefs.endpoint + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
+                                console.log("Respsone sent");
                                 worker.port.emit("adResult" + data.nonce, response.text);
                             }
                         }).get();
