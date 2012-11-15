@@ -1,0 +1,30 @@
+{
+    "description": "The official UT Dallas ad replacement server",
+    "links": [
+        {
+            "name": "Kittens",
+            "url": "kitten",
+            "description": "Uses placekitten.com to replace your ads with kittens"
+        },
+        {
+            "name": "Yo Dawg",
+            "url": "yodawg",
+            "description": "We put your website in your website so you can surf while you surf"
+        },
+        {
+            "name": "Reddit",
+            "url": "reddit",
+            "description": "Pulls randomly from the current top links on Reddit"
+        },
+        {
+            "name": "Go Outside",
+            "url": "gooutside",
+            "description": "Tracks how long you've been browsing the web"
+        },
+        {
+            "name": "Socket Demo",
+            "url": "socketdemo",
+            "description": "A demo powered by socket.io that allows you to post messages on a website and receive live updates for new messages"
+        }
+    ]
+}
