@@ -11,8 +11,11 @@ var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
 var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
 var socketDemoTemplate = '<iframe src="http://localhost:3000/socketdemocontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
-
 var redditTemplate = '<iframe width="{width}" height="{height}" src="/redditframe" />';
+var drawTemplate = '<iframe src="http://localhost:3000/drawcontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
+
+
+
 
 
 //Init
@@ -37,6 +40,19 @@ app.get('/socketdemocontent', function(req,res){
     console.log("socket content request");
     res.render('socketdemo/index.jade', {width: req.query.width, height: req.query.height, location: req.query.location});
 });
+
+//Draw
+app.get('/draw', function(req, res){
+    console.log(req.query.width + "x" + req.query.height);
+    res.send(drawTemplate.replace(/\{width\}/g, req.query.width).replace(/\{height\}/g, req.query.height).replace(/\{location\}/g, req.query.location));
+});
+
+app.get('/drawcontent', function(req,res){
+    console.log("socket content request");
+    res.render('draw.jade', {width: req.query.width, height: req.query.height, location: req.query.location});
+});
+
+
 
 //Yo dawg, we put your website in your website so you can block ads while you block ads
 app.get('/yodawg', function(req, res){
@@ -76,6 +92,35 @@ io.of('/_socketdemo').on('connection', function(socket){
         socketDemoMessage[socket.roomkey] = data.text;
         io.of('/_socketdemo').in(socket.roomkey).emit('newmsg', {text: data.text});
     });
+});
+
+// Verbatim socket script from Draw.
+var active_connections = 0;
+io.sockets.on('connection', function (socket) {
+
+  active_connections++;
+
+  io.sockets.emit('user:connect', active_connections);
+
+  socket.on('disconnect', function () {
+    active_connections--;
+    io.sockets.emit('user:disconnect', active_connections);
+  });
+
+  // EVENT: User stops drawing something
+  socket.on('draw:progress', function (uid, co_ordinates) {
+    
+    io.sockets.emit('draw:progress', uid, co_ordinates);
+
+  });
+
+  // EVENT: User stops drawing something
+  socket.on('draw:end', function (uid, co_ordinates) {
+    
+    io.sockets.emit('draw:end', uid, co_ordinates);
+
+  });
+  
 });
 
 //Reddit serverin'
