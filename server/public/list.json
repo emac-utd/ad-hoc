@@ -4,7 +4,7 @@
         {
             "name": "Kittens",
             "url": "kitten",
-            "description": "Uses placekitten.com to replace your ads with kittens"
+            "description": "Your ads can has kittens (uses placekitten.com)"
         },
         {
             "name": "Yo Dawg",
@@ -19,12 +19,17 @@
         {
             "name": "Go Outside",
             "url": "gooutside",
-            "description": "Tracks how long you've been browsing the web"
+            "description": "Need a guilt trip?  We'll watch how long you're online for you."
         },
         {
             "name": "Socket Demo",
             "url": "socketdemo",
             "description": "A demo powered by socket.io that allows you to post messages on a website and receive live updates for new messages"
+        },
+        {
+            "name": "Graffiti",
+            "url": "draw",
+            "description": "Turn ad space into art space.  Based on Richard Powell's draw.js."
         }
     ]
 }

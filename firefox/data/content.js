@@ -3,7 +3,7 @@ try {
     self.on('message', function(message) {
         if (message.action == 'setSelectors') {
             var AR = new AdReplacer(message.data);
-            AR.replace();
+            $(document).ready(function(){AR.replace();});
         }
     });
 } catch(e) {

@@ -1,6 +1,6 @@
 var AdReplacer = (function() {
     var selectors = [];
-    var nonces = [];    
+    var nonces = [];
     
     function AdReplacer(theSelectors) {
         selectors = theSelectors;
@@ -11,9 +11,11 @@ var AdReplacer = (function() {
     AdReplacer.prototype.replace = function() {
         var rep = this;
         selectors.forEach(function(selector) {
+            console.log("Selector loaded");
             var $elements = $(selector);
             if ($elements.length) {
                 $elements.each(function(i, element) {
+                    console.log("Element matched");
                     var $element = $(element);
                     var $repl = rep.$replTemplate.clone(true);
                     var width = $element.width();
@@ -43,6 +45,7 @@ var AdReplacer = (function() {
                     self.port.on("adResult" + nonce, function(data){
                         $repl.html(data);
                         $element.replaceWith($repl);
+                        console.log("Element swapped");
 
                         setTimeout(function($repl) {
                             return function() { $repl.css('opacity', 1); };

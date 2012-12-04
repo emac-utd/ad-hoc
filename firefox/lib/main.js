@@ -7,6 +7,9 @@ const widget = require('widget');
 const panel = require('panel');
 
 var whitelist = [/.*youtube.com\/watch.*/, /.*\?arnoreplace=yes.*/];
+var dropdownValues = [];
+var description = "";
+var adPanel = null;
 
 function shouldFilter(url)
 {
@@ -17,6 +20,39 @@ function shouldFilter(url)
     }
     return true;
 }
+
+function getLinks()
+{
+    if(prefSet.prefs.endpoint.match)
+    var linkRequest = Request({
+        url: prefSet.prefs.endpoint + "/list.json",
+        onComplete: function(response){
+            if(response.status >= 400 || response.json === null)
+            {
+                console.log("Invalid URL");
+            }
+            else
+            {
+                description = response.json.description;
+                dropdownValues = response.json.links;
+                
+                if(adPanel)
+                {
+                    adPanel.port.emit("show", {
+                        source: prefSet.prefs.endpoint,
+                        enabled: prefSet.prefs.enabled,
+                        description: description,
+                        links: dropdownValues
+                    });
+                }
+            }
+        }
+    }).get();
+}
+
+prefSet.on("endpoint", function(){
+    getLinks();
+});
 
 var selectors = [];
 
@@ -31,9 +67,9 @@ var selectorsRequest = Request({
         });
 
         //UI panel
-        var adPanel = panel.Panel({
+        adPanel = panel.Panel({
             width: 300,
-            height: 75,
+            height: 150,
             contentURL: data.url("settingspanel.html"),
             contentScriptFile: data.url("settings.js")
         });
@@ -47,15 +83,25 @@ var selectorsRequest = Request({
         });
 
         adPanel.on("show", function() {
-            adPanel.port.emit("show", {source: prefSet.prefs.endpoint, enabled: prefSet.prefs.enabled});
+            adPanel.port.emit("show", {
+                source: prefSet.prefs.endpoint,
+                enabled: prefSet.prefs.enabled,
+                description: description,
+                links: dropdownValues,
+                currentLink: prefSet.prefs.link
+            });
         });
 
         adPanel.port.on("sourcechange", function(data){
-            prefSet.prefs.endpoint = data.source;
+            prefSet.prefs.endpoint = data.source.replace(/\/$/, "");
         });
 
         adPanel.port.on("enabledchange", function(data){
-            prefSet.prefs.enabled = data.source;
+            prefSet.prefs.enabled = data.enabled;
+        });
+
+        adPanel.port.on("linkchange", function(data){
+            prefSet.prefs.link = data.link;
         });
 
         //Ad filter
@@ -78,7 +124,7 @@ var selectorsRequest = Request({
                     {
                         console.log("Request received");
                         var adRequest = Request({
-                            url: prefSet.prefs.endpoint + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
+                            url: prefSet.prefs.endpoint + "/" + prefSet.prefs.link + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
                                 console.log("Respsone sent");
@@ -92,3 +138,6 @@ var selectorsRequest = Request({
         
     }
 }).get();
+
+//Init list
+getLinks();
