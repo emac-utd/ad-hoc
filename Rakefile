@@ -2,12 +2,12 @@ require 'erb'
 require 'ostruct'
 
 METADATA = OpenStruct.new(
-  :name => 'ad ade',
-  :shortname => 'ad-ade',
-  :version => '1.5',
-  :author => 'Eike Theresa Stender, Philipp Bosch',
-  :description => 'UTD ad-ade fork',
-  :website => 'http://www.ad-ade.de/'
+  :name => 'ad-hoc',
+  :shortname => 'ad-hoc',
+  :version => '.1',
+  :author => 'EMAC lab',
+  :description => 'Layout renovation tool',
+  :website => 'emac.utdallas.edu'
 )
 
 task :build => [:build_chrome, :build_firefox, :build_safari]
