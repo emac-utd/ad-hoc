@@ -7,13 +7,13 @@ var express = require('express'),
     countdown = require('countdown');
 
 //Constants
-var SITE_ADDRESS = 'localhost:3000';
+var SITE_ADDRESS = 'http://localhost:3000/';
 
 var kittenTemplate = '<img src="http://placekitten.com/{width}/{height}" />';
 var yoDawgTemplate = '<iframe width="{width}" height="{height}" src="{url}" />';
 var socketDemoMessage = {};
 var socketDemoTemplate = '<iframe src="http://localhost:3000/socketdemocontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
-var redditTemplate = '<iframe width="{width}" height="{height}" src="{site_address}" />';
+var redditTemplate = '<iframe width="{width}" height="{height}" src="' + SITE_ADDRESS + 'reddit" />';
 var drawTemplate = '<iframe src="http://localhost:3000/drawcontent/?width={width}&height={height}&location={location}" width="{width}" height="{height}" />';
 
 
@@ -164,7 +164,7 @@ function getTop() {
 
 
 app.get('/reddit', function(req, res) {
-    res.send(redditTemplate.replace("{width}", req.query.width).replace("{height}", req.query.height).replace("{site_address}", (SITE_ADDRESS + '/redditframe')));
+    res.send(redditTemplate.replace("{width}", req.query.width).replace("{height}", req.query.height));
 });
 
 app.get('/redditframe', function(req, res) {
