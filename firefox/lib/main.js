@@ -104,6 +104,10 @@ var selectorsRequest = Request({
             prefSet.prefs.link = data.link;
         });
 
+        adPanel.port.on("closeclick", function(data){
+            adPanel.hide();
+        });
+
         //Ad filter
         pageMod.PageMod({
             include: "*",

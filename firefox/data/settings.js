@@ -3,6 +3,7 @@ var enabledBox = document.getElementById("enabled");
 var description = document.getElementById("description");
 var linkDescription = document.getElementById("contentdescription");
 var links = document.getElementById("content");
+var closeButton = document.getElementById("close");
 
 self.port.on("show", function (data) {
     sourceBox.value = data.source;
@@ -35,4 +36,8 @@ enabledBox.addEventListener('change', function(ev) {
 
 links.addEventListener('change', function(ev) {
     self.port.emit("linkchange", {link: links.options[links.selectedIndex].value});
+});
+
+closeButton.addEventListener('click', function(ev) {
+    self.port.emit("closeclick", {});
 });
