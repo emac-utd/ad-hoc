@@ -1,8 +1,8 @@
-#mobilelab-flavored ad-ade#
+#Ad-Hoc#
 
-Our ad-ade is a browser extension to replace blacklisted material with user-determined content. 
+Ad-Hoc is a browser extension to replace blacklisted material with user-determined content. 
 
-Extensions can be built using the included rakefile. Only Firefox tested so far. 
+Extensions can be built using the included rakefile. Currently only works in Firefox. 
 
 ##Attributions##
 Forked from [ad-ade](https://github.com/philippbosch/ad-ade)
