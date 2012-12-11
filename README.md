@@ -12,6 +12,9 @@ Download the .xpi file from (not available yet) and manually install the file on
 ##Reference Server##
 Requires [Node.js](http://nodejs.org/)
 
+##More Information##
+Check our [wiki](https://github.com/emac-utd/ad-hoc/wiki)
+
 ##Attributions##
 Forked from [ad-ade](https://github.com/philippbosch/ad-ade)
 
