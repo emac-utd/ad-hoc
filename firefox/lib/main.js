@@ -13,6 +13,8 @@ var adPanel = null;
 
 function shouldFilter(url)
 {
+    if(!prefSet.prefs.enabled)
+        return false;
     for(var i = 0; i < whitelist.length; i++)
     {
         if(whitelist[i].test(url))
@@ -42,7 +44,8 @@ function getLinks()
                         source: prefSet.prefs.endpoint,
                         enabled: prefSet.prefs.enabled,
                         description: description,
-                        links: dropdownValues
+                        links: dropdownValues,
+                        currentLink: prefSet.prefs.link
                     });
                 }
             }
@@ -82,7 +85,7 @@ var selectorsRequest = Request({
             panel: adPanel
         });
 
-        adPanel.on("show", function() {
+        var initPanel = function() {
             adPanel.port.emit("show", {
                 source: prefSet.prefs.endpoint,
                 enabled: prefSet.prefs.enabled,
@@ -90,7 +93,11 @@ var selectorsRequest = Request({
                 links: dropdownValues,
                 currentLink: prefSet.prefs.link
             });
-        });
+            console.log(dropdownValues);
+        };
+
+        adPanel.on("show", initPanel);
+        adPanel.on("refresh", initPanel);
 
         adPanel.port.on("sourcechange", function(data){
             prefSet.prefs.endpoint = data.source.replace(/\/$/, "");
@@ -98,6 +105,7 @@ var selectorsRequest = Request({
 
         adPanel.port.on("enabledchange", function(data){
             prefSet.prefs.enabled = data.enabled;
+            console.log(data.enabled);
         });
 
         adPanel.port.on("linkchange", function(data){

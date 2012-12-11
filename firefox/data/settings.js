@@ -4,6 +4,7 @@ var description = document.getElementById("description");
 var linkDescription = document.getElementById("contentdescription");
 var links = document.getElementById("content");
 var closeButton = document.getElementById("close");
+var refresh = document.getElementById("refresh");
 
 self.port.on("show", function (data) {
     sourceBox.value = data.source;
@@ -28,9 +29,11 @@ self.port.on("show", function (data) {
 
 sourceBox.addEventListener('change', function(ev) {
     self.port.emit("sourcechange", {source: sourceBox.value});
+    console.log(sourceBox.value);
 });
 
-enabledBox.addEventListener('change', function(ev) {
+enabledBox.addEventListener('click', function(ev) {
+    console.log(enabled.checked);
     self.port.emit("enabledchange", {enabled: enabled.checked});
 });
 
@@ -40,4 +43,9 @@ links.addEventListener('change', function(ev) {
 
 closeButton.addEventListener('click', function(ev) {
     self.port.emit("closeclick", {});
+});
+
+refresh.addEventListener('click', function(ev){
+    self.port.emit("refresh", {});
+    return false;
 });
