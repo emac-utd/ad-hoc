@@ -2,7 +2,15 @@
 
 Our ad-ade is a browser extension to replace blacklisted material with user-determined content. 
 
-Extensions can be built using the included rakefile. Only Firefox tested so far. 
+Extensions can be built using the included rakefile. Only the Firefox build is functional so far. 
+
+##Getting the extension##
+
+Build from source (requires [Mozilla's Add-on SDK](https://addons.mozilla.org/en-US/developers/builder))
+Download the .xpi file from (not available yet) and manually install the file on Firefox's "Add-ons" page.
+
+##Reference Server##
+Requires [Node.js](http://nodejs.org/)
 
 ##Attributions##
 Forked from [ad-ade](https://github.com/philippbosch/ad-ade)
