@@ -7,7 +7,7 @@ Extensions can be built using the included rakefile. Only the Firefox build is f
 ##Ways to Get the Extension##
 
 * Build from source (requires [Mozilla's Add-on SDK](https://addons.mozilla.org/en-US/developers/builder))
-* Download the .xpi file from (not available yet) and manually install the file on Firefox's "Add-ons" page.
+* Download the .xpi file (not available yet) and manually install the file on Firefox's "Add-ons" page.
 
 ##Reference Server##
 Requires [Node.js](http://nodejs.org/)
