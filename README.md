@@ -2,6 +2,8 @@
 
 Ad-Hoc is a browser extension to replace blacklisted material with user-determined content. 
 
+Our intent with this project is to explore the multifaceted dynamic between content providers, advertisers, and users. By disrupting layout and distribution patterns, we are able to explore and reconceptualize the expressions of those relationships. 
+
 Extensions can be built using the included rakefile. Only the Firefox build is functional so far. 
 
 ##Ways to Get the Extension##
