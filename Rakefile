@@ -2,12 +2,12 @@ require 'erb'
 require 'ostruct'
 
 METADATA = OpenStruct.new(
-  :name => 'ad-hoc',
+  :name => 'Ad-Hoc',
   :shortname => 'ad-hoc',
-  :version => '.1',
+  :version => '1.0',
   :author => 'EMAC lab',
   :description => 'Layout renovation tool',
-  :website => 'emac.utdallas.edu'
+  :website => 'http://emac-utd.github.com/ad-hoc/'
 )
 
 task :build => [:build_chrome, :build_firefox, :build_safari]
