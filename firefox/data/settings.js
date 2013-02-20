@@ -18,7 +18,7 @@ self.port.on("show", function (data) {
     for(var i = 0; i < data.links.length; i++)
     {
         var option = document.createElement("option");
-        option.innerHTML = data.links[i].name;
+        option.appendChild(document.createTextNode(data.links[i].name));
         console.log(data.links[i].name);
         option.value = data.links[i].url;
         links.appendChild(option);
