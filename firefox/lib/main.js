@@ -6,7 +6,7 @@ const prefSet = require('simple-prefs');
 const widget = require('widget');
 const panel = require('panel');
 
-var whitelist = [/.*youtube.com\/watch.*/, /.*\?arnoreplace=yes.*/];
+var whitelist = [/http:\/\/(www\.)?youtube\.com\/watch.*/, /.*\?arnoreplace=yes.*/];
 var dropdownValues = [];
 var description = "";
 var adPanel = null;
@@ -117,7 +117,7 @@ var selectorsRequest = Request({
 
         //Ad filter
         pageMod.PageMod({
-            include: "*",
+            include: /http:\/\/.*/,
             contentScriptWhen: "ready",
             contentScriptFile: [
                 data.url("common/jquery.min.js"),
