@@ -19,7 +19,6 @@ self.port.on("show", function (data) {
     {
         var option = document.createElement("option");
         option.appendChild(document.createTextNode(data.links[i].name));
-        console.log(data.links[i].name);
         option.value = data.links[i].url;
         links.appendChild(option);
         if(data.links[i].url == data.currentLink)
@@ -29,11 +28,9 @@ self.port.on("show", function (data) {
 
 sourceBox.addEventListener('change', function(ev) {
     self.port.emit("sourcechange", {source: sourceBox.value});
-    console.log(sourceBox.value);
 });
 
 enabledBox.addEventListener('click', function(ev) {
-    console.log(enabled.checked);
     self.port.emit("enabledchange", {enabled: enabled.checked});
 });
 

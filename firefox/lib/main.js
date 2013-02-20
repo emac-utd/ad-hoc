@@ -31,7 +31,8 @@ function getLinks()
         onComplete: function(response){
             if(response.status >= 400 || response.json === null)
             {
-                console.log("Invalid URL");
+                //TODO: Feedback message
+                //console.log("Invalid URL");
             }
             else
             {
@@ -93,7 +94,6 @@ var selectorsRequest = Request({
                 links: dropdownValues,
                 currentLink: prefSet.prefs.link
             });
-            console.log(dropdownValues);
         };
 
         adPanel.on("show", initPanel);
@@ -105,7 +105,6 @@ var selectorsRequest = Request({
 
         adPanel.port.on("enabledchange", function(data){
             prefSet.prefs.enabled = data.enabled;
-            console.log(data.enabled);
         });
 
         adPanel.port.on("linkchange", function(data){
@@ -134,12 +133,10 @@ var selectorsRequest = Request({
                     worker.postMessage({'action': 'setSelectors', 'data': selectors});
                     worker.port.on("adRequest", function(data)
                     {
-                        console.log("Request received");
                         var adRequest = Request({
                             url: prefSet.prefs.endpoint + "/" + prefSet.prefs.link + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
-                                console.log("Respsone sent");
                                 worker.port.emit("adResult" + data.nonce, response.text);
                             }
                         }).get();

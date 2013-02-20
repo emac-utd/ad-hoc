@@ -11,11 +11,9 @@ var AdReplacer = (function() {
     AdReplacer.prototype.replace = function() {
         var rep = this;
         selectors.forEach(function(selector) {
-            console.log("Selector loaded");
             var $elements = $(selector);
             if ($elements.length) {
                 $elements.each(function(i, element) {
-                    console.log("Element matched");
                     var $element = $(element);
                     var $repl = rep.$replTemplate.clone(true);
                     var width = $element.width();
@@ -34,18 +32,10 @@ var AdReplacer = (function() {
                     $element.parents('a').click(function(){return false;});
 
                     var nonce = Math.floor(Math.random() * 100000);
-                    /*console.log("First nonce");
-                    while(nonces.indexOf(nonce != -1))
-                    {
-                        nonce = Math.floor(Math.random() * 100000);
-                        console.log("Nonce cycle");
-                    }
-                    nonces.push(nonce); */
 
                     self.port.on("adResult" + nonce, function(data){
                         $repl.html(data);
                         $element.replaceWith($repl);
-                        console.log("Element swapped");
 
                         setTimeout(function($repl) {
                             return function() { $repl.css('opacity', 1); };
