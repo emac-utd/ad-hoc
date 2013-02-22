@@ -138,7 +138,6 @@ var selectorsRequest = Request({
                             url: prefSet.prefs.endpoint + "/" + prefSet.prefs.link + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
-                                console.log(response.text);
                                 //This code brought to you by http://stackoverflow.com/a/12860340/780075
                                 // Parse the HTML code into a temporary document
                                 var doc = Cc["@mozilla.org/xmlextras/domparser;1"]
