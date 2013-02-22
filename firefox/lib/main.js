@@ -5,6 +5,7 @@ const Request = require('request').Request;
 const prefSet = require('simple-prefs');
 const widget = require('widget');
 const panel = require('panel');
+var {Cc, Ci} = require("chrome");
 
 var whitelist = [/http:\/\/(www\.)?youtube\.com\/watch.*/, /.*\?arnoreplace=yes.*/];
 var dropdownValues = [];
@@ -137,7 +138,62 @@ var selectorsRequest = Request({
                             url: prefSet.prefs.endpoint + "/" + prefSet.prefs.link + "?width=" + data.width + "&height=" + data.height + "&location=" + worker.tab.url,
                             onComplete: function(response)
                             {
-                                worker.port.emit("adResult" + data.nonce, response.text);
+                                console.log(response.text);
+                                //This code brought to you by http://stackoverflow.com/a/12860340/780075
+                                // Parse the HTML code into a temporary document
+                                var doc = Cc["@mozilla.org/xmlextras/domparser;1"]
+                                               .createInstance(Ci.nsIDOMParser)
+                                               .parseFromString(response.text, "text/html");
+
+                                // Make sure all links are absolute
+                                for (var i = 0; i < doc.links.length; i++)
+                                    doc.links[i].setAttribute("href", doc.links[i].href);
+
+                                // Make sure all stylesheets are inlined
+                                var stylesheets = doc.getElementsByTagName("link");
+                                var stylesheetCount = stylesheets.length;
+                                var cssComplete = function(sheet, index){
+                                    return function(cssResponse){
+                                        var style = doc.createElement("style");
+                                        style.setAttribute("type", "text/css");
+                                        style.textContent = cssResponse;
+                                        sheet.parentNode.replaceChild(style, stylesheets[i]);
+                                        if(index == stylesheetCount - 1)
+                                        {
+                                            // Serialize the document into a string again
+                                            html = Cc["@mozilla.org/xmlextras/xmlserializer;1"]
+                                                     .createInstance(Ci.nsIDOMSerializer)
+                                                     .serializeToString(doc.documentElement);
+
+                                            // Now sanizite the HTML code
+                                            var parser = Cc["@mozilla.org/parserutils;1"].getService(Ci.nsIParserUtils);
+                                            var sanitizedHTML = parser.sanitize(html, parser.SanitizerAllowStyle);
+                                            worker.port.emit("adResult" + data.nonce, sanitizedHTML);
+                                        }
+                                    };
+                                };
+                                if(stylesheetCount > 0)
+                                {
+                                    for (i = 0; i < stylesheets.length; i++)
+                                    {
+                                        var request = Request({
+                                            url: stylesheets[i].href,
+                                            onComplete: cssComplete(stylesheets[i], i)
+                                        }).get();
+                                    }
+                                }
+                                else
+                                {
+                                    // Serialize the document into a string again
+                                    html = Cc["@mozilla.org/xmlextras/xmlserializer;1"]
+                                         .createInstance(Ci.nsIDOMSerializer)
+                                         .serializeToString(doc.documentElement);
+
+                                    // Now sanizite the HTML code
+                                    var parser = Cc["@mozilla.org/parserutils;1"].getService(Ci.nsIParserUtils);
+                                    var sanitizedHTML = parser.sanitize(html, parser.SanitizerAllowStyle);
+                                    worker.port.emit("adResult" + data.nonce, sanitizedHTML);
+                                }
                             }
                         }).get();
                     });
